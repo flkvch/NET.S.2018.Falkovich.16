@@ -4,12 +4,19 @@ using System.Collections.Generic;
 
 namespace BinarySearchTree
 {
-    public class BinaryTree<T> 
+    /// <summary>
+    /// Binary Search Tree
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
+    public class BinaryTree<T> : IEnumerable<T>
     {
         private Node<T> root;
         private IComparer<T> comparer;
-        public int NumOfElements { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryTree{T}"/> class.
+        /// </summary>
         public BinaryTree()
         {
             root = null;
@@ -17,17 +24,41 @@ namespace BinarySearchTree
             comparer = Comparer<T>.Default;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryTree{T}"/> class.
+        /// </summary>
+        /// <param name="comparer">The comparer.</param>
         public BinaryTree(IComparer<T> comparer) : this()
         {
             this.comparer = comparer;
         }
 
+        /// <summary>
+        /// Gets the number of elements.
+        /// </summary>
+        /// <value>
+        /// The number of elements.
+        /// </value>
+        public int NumOfElements { get; private set; }
+
         #region Base Methods
-        public Node<T> Find(T element)
+
+        /// <summary>
+        /// Determines whether [contains] [the specified element].
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains] [the specified element]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Contains(T element)
         {
-            return Find(element, root);
+            return Find(element, root) != null;
         }
 
+        /// <summary>
+        /// Inserts the specified element.
+        /// </summary>
+        /// <param name="element">The element.</param>
         public void Insert(T element)
         {
             if (root == null)
@@ -39,10 +70,14 @@ namespace BinarySearchTree
 
             Insert(element, root);
         }
-      
+
+        /// <summary>
+        /// Removes the specified element.
+        /// </summary>
+        /// <param name="element">The element.</param>
         public void Remove(T element)
         {
-            if(root == null)
+            if (root == null) 
             {
                 return;
             }
@@ -53,6 +88,11 @@ namespace BinarySearchTree
 
         #region Traverse
 
+        /// <summary>
+        /// Traverse in the pre order.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">The tree is empty.</exception>
         public IEnumerable<T> PreOrder()
         {
             if (root == null)
@@ -63,6 +103,11 @@ namespace BinarySearchTree
             return PreOrder(root);
         }
 
+        /// <summary>
+        /// Traverse in the in order.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">The tree is empty.</exception>
         public IEnumerable<T> InOrder()
         {
             if (root == null)
@@ -72,7 +117,12 @@ namespace BinarySearchTree
 
             return InOrder(root);
         }
-      
+
+        /// <summary>
+        /// Traverse in the post order.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Tree is empty!</exception>
         public IEnumerable<T> PostOrder()
         {
             if (ReferenceEquals(root, null))
@@ -197,6 +247,7 @@ namespace BinarySearchTree
 
             return node;
         }
+
         #endregion
 
         #region Private Traverce methods
@@ -263,7 +314,16 @@ namespace BinarySearchTree
 
             yield return node.Value;
         }
-        #endregion
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            return InOrder().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return InOrder().GetEnumerator();
+        }
+        #endregion   
     }
 }
